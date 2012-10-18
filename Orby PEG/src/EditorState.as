@@ -8,7 +8,7 @@ package
 	 */
 	public class EditorState extends FlxState
 	{
-		[Embed(source = "images/Grid1.png")] private var Grid1Class:Class;
+		[Embed(source = "images/HalfBackground.png")] private var Grid1Class:Class;
 		[Embed(source = "images/Player.png")] private var PlayerImageClass:Class;
 		[Embed(source = "images/EditMenu.png")] private var EditMenuImageClass:Class;
 		[Embed(source = "images/buttonPlayer.png")] private var ButtonPlayerImageClass:Class;
@@ -25,6 +25,7 @@ package
 		private var selectedItem:Number = 0; //The index number of the selected item in the edit menu.
 		private var playerused:Boolean = false; //A boolean used to check if the player has already been placed.
 		private var exitused:Boolean = false; //A boolean used to check if the exit has already been placed.
+		private var range:Number;
 		
 		private var xcounter:Number;
 		private var ycounter:Number;
@@ -42,6 +43,7 @@ package
 				case 1:
 					{
 						itemScale = 1;
+						range = 40;
 						background = new FlxSprite(0, 0, Grid1Class); break;
 					}
 				default:
@@ -114,7 +116,7 @@ package
 		}
 		
 		public function createObject(item:Number):void {
-			xcounter = FlxG.mouse.x;
+			xcounter = FlxG.mouse.x - 20;
 			for (xcounter; xcounter > 0; xcounter = xcounter - 40) 
 			{
 				trace ("xcounter = " + xcounter);
@@ -134,7 +136,7 @@ package
 			}
 			rows = 0;
 			
-			ycounter = FlxG.mouse.y;
+			ycounter = FlxG.mouse.y - 20;
 			for (ycounter; ycounter > 0; ycounter = ycounter - 40) 
 			{
 				trace ("ycounter = " + ycounter);
@@ -156,7 +158,7 @@ package
 			
 			switch (item) {
 				case 1:
-					player = new Player(fixedX, fixedY, 0);
+					player = new Player(fixedX, fixedY, range);
 					add(player); break;
 				case 2:
 					exit = new FlxSprite(fixedX - 5, fixedY - 5, ExitImageClass);
