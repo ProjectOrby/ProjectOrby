@@ -9,6 +9,7 @@ package
 	public class EditorState extends FlxState
 	{
 		[Embed(source = "images/HalfBackground.png")] private var Grid1Class:Class;
+		[Embed(source = "images/HalfBackground2.png")] private var Grid2Class:Class;
 		[Embed(source = "images/Player.png")] private var PlayerImageClass:Class;
 		[Embed(source = "images/EditMenu.png")] private var EditMenuImageClass:Class;
 		[Embed(source = "images/buttonPlayer.png")] private var ButtonPlayerImageClass:Class;
@@ -17,7 +18,7 @@ package
 		[Embed(source = "images/Exit.png")] private var ExitImageClass:Class;
 		
 		private var background:FlxSprite; //The background sprite.
-		private var itemScale:Number = 1; //Indicates the scale of the placable objects.
+		private var itemScale:FlxPoint; //Indicates the scale of the placable objects.
 		private var editMenuBackground:FlxSprite; //The background sprite of the edit menu.
 		private var buttonPlayer:FlxSprite; //The Player button.
 		private var buttonExit:FlxSprite; //The Exit button.
@@ -42,9 +43,17 @@ package
 					trace("No grid number found"); break;
 				case 1:
 					{
-						itemScale = 1;
+						//itemScale = 1;
+						itemScale = new FlxPoint(1, 1);
 						range = 40;
 						background = new FlxSprite(0, 0, Grid1Class); break;
+					}
+				case 2:
+					{
+						//itemScale = 0.5;
+						itemScale = new FlxPoint(0.5, 0.5);
+						range = 20;
+						background = new FlxSprite(0, 0, Grid2Class); break;
 					}
 				default:
 					trace("No grid number found"); break;
@@ -116,18 +125,18 @@ package
 		}
 		
 		public function createObject(item:Number):void {
-			xcounter = FlxG.mouse.x - 20;
-			for (xcounter; xcounter > 0; xcounter = xcounter - 40) 
+			xcounter = FlxG.mouse.x - range/2;
+			for (xcounter; xcounter > 0; xcounter = xcounter - range) 
 			{
 				trace ("xcounter = " + xcounter);
-				if (xcounter < 41) {
+				if (xcounter < range+1) {
 					trace ("xcounter");
-					if (xcounter < 20) {
-						fixedX = rows * 40;
+					if (xcounter < range/2) {
+						fixedX = rows * range;
 						trace ("x = 0 kant");
 					} else {
-						fixedX = rows * 40 + 40;
-						trace ("x = 40 kant");
+						fixedX = rows * range + range;
+						trace ("x = " + range + " kant");
 					}
 				} else {
 					rows++;
@@ -136,18 +145,18 @@ package
 			}
 			rows = 0;
 			
-			ycounter = FlxG.mouse.y - 20;
-			for (ycounter; ycounter > 0; ycounter = ycounter - 40) 
+			ycounter = FlxG.mouse.y - range/2;
+			for (ycounter; ycounter > 0; ycounter = ycounter - range) 
 			{
 				trace ("ycounter = " + ycounter);
-				if (ycounter < 41) {
+				if (ycounter < range+1) {
 					trace ("ycounter");
-					if (ycounter < 20) {
-						fixedY = rows * 40;
+					if (ycounter < range/2) {
+						fixedY = rows * range;
 						trace ("y = 0 kant");
 					} else {
-						fixedY = rows * 40 + 40;
-						trace ("y = 40 kant");
+						fixedY = rows * range + range;
+						trace ("y = " + range + " kant");
 					}
 				} else {
 					rows++;
@@ -159,10 +168,68 @@ package
 			switch (item) {
 				case 1:
 					player = new Player(fixedX, fixedY, range);
+					player.scale = itemScale;
 					add(player); break;
 				case 2:
 					exit = new FlxSprite(fixedX - 5, fixedY - 5, ExitImageClass);
+					exit.scale = itemScale;
 					add(exit); break;
+				default:
+					trace("There is no object with the current index number.");
+			}
+			selectedItem = 0;
+		}
+		
+		public function moveObject(item:Number):void {
+			xcounter = FlxG.mouse.x - range/2;
+			for (xcounter; xcounter > 0; xcounter = xcounter - range) 
+			{
+				trace ("xcounter = " + xcounter);
+				if (xcounter < range+1) {
+					trace ("xcounter");
+					if (xcounter < range/2) {
+						fixedX = rows * range;
+						trace ("x = 0 kant");
+					} else {
+						fixedX = rows * range + range;
+						trace ("x = " + range + " kant");
+					}
+				} else {
+					rows++;
+					trace ("loop #" + rows);
+				}
+			}
+			rows = 0;
+			
+			ycounter = FlxG.mouse.y - range/2;
+			for (ycounter; ycounter > 0; ycounter = ycounter - range) 
+			{
+				trace ("ycounter = " + ycounter);
+				if (ycounter < range+1) {
+					trace ("ycounter");
+					if (ycounter < range/2) {
+						fixedY = rows * range;
+						trace ("y = 0 kant");
+					} else {
+						fixedY = rows * range + range;
+						trace ("y = " + range + " kant");
+					}
+				} else {
+					rows++;
+					trace ("loop #" + rows);
+				}
+			}
+			rows = 0;
+			
+			switch (item) {
+				case 1:
+					//player.x = fixedX;
+					//player.y = fixedY;
+					break;
+				case 2:
+					//exit.x = fixedX;
+					//exit.y = fixedY;
+					break;
 				default:
 					trace("There is no object with the current index number.");
 			}
