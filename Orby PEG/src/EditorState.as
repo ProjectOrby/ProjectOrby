@@ -23,7 +23,8 @@ package
 		private var buttonPlayer:FlxSprite; //The Player button.
 		private var buttonExit:FlxSprite; //The Exit button.
 		private var mouseTracker:FlxSprite; //A 1px sprite that follows the x and y of the mouse to check collisions.
-		private var selectedItem:Number = 0; //The index number of the selected item in the edit menu.
+		private var selectedButton:Number = 0; //The index number of the selected item in the edit menu.
+		private var selectedItem:Number = 0; //The index number of the selected item in the field.
 		private var playerused:Boolean = false; //A boolean used to check if the player has already been placed.
 		private var exitused:Boolean = false; //A boolean used to check if the exit has already been placed.
 		private var range:Number;
@@ -89,6 +90,10 @@ package
 			mouseTracker.x = FlxG.mouse.x;
 			mouseTracker.y = FlxG.mouse.y;
 			
+			if (FlxG.keys.justReleased("ESCAPE")) {
+				fadeToMenu();
+			}
+			
 			if (FlxG.mouse.y < 10) {
 				editMenuBackground.y = 0;
 				buttonPlayer.y = 0;
@@ -101,24 +106,32 @@ package
 			}
 			
 			if (FlxG.mouse.justReleased()) {
-				if (selectedItem != 0) {
-					createObject(selectedItem);
+				if (selectedButton != 0) {
+					createObject(selectedButton);
 				}
-				if (selectedItem == 0) {
+				if (selectedItem != 0) {
+					trace(selectedItem + " <-");
+					moveObject(selectedItem);
+				}
+				if (selectedButton == 0 && selectedItem == 0) {
 					if (FlxG.overlap(mouseTracker, buttonPlayer)) {
 						if (playerused == false) {
-							selectedItem = 1;
+							selectedButton = 1;
 							playerused = true;
 							buttonPlayer.alpha = 0.5;
 						}
 					} else if (FlxG.overlap(mouseTracker, buttonExit)) {
 						if (exitused == false) {
-							selectedItem = 2;
+							selectedButton = 2;
 							exitused = true;
 							buttonExit.alpha = 0.5;
 						}
 					} else if (FlxG.overlap(mouseTracker, player)) {
-						//lol
+						trace ("selectedItem before: " + selectedItem);
+						selectedItem = 1;
+					} else if (FlxG.overlap(mouseTracker, exit)) {
+						trace ("selectedItem before: " + selectedItem);
+						selectedItem = 2;
 					}
 				}
 			}
@@ -166,6 +179,9 @@ package
 			rows = 0;
 			
 			switch (item) {
+				case 0:
+					trace("no number given");
+					break;
 				case 1:
 					player = new Player(fixedX, fixedY, range);
 					player.scale = itemScale;
@@ -177,7 +193,7 @@ package
 				default:
 					trace("There is no object with the current index number.");
 			}
-			selectedItem = 0;
+			selectedButton = 0;
 		}
 		
 		public function moveObject(item:Number):void {
@@ -223,17 +239,28 @@ package
 			
 			switch (item) {
 				case 1:
-					//player.x = fixedX;
-					//player.y = fixedY;
+					player.x = fixedX;
+					player.y = fixedY;
+					selectedItem = 0;
 					break;
 				case 2:
-					//exit.x = fixedX;
-					//exit.y = fixedY;
+					exit.x = fixedX;
+					exit.y = fixedY;
+					selectedItem = 0;
 					break;
 				default:
 					trace("There is no object with the current index number.");
 			}
-			selectedItem = 0;
+		}
+		
+		public function fadeToMenu():void
+		{
+			FlxG.fade(0xFF4b4b4b, 1, returnToMenu);
+		}
+		
+		public function returnToMenu():void
+		{
+			FlxG.switchState(new MenuState());
 		}
 	}
 }
