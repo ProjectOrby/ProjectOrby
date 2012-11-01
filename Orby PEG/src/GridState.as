@@ -8,7 +8,7 @@ package
 	 */
 	public class GridState extends FlxState
 	{
-		[Embed(source = "images/Background.png")] private var BackgroundImageClass:Class;
+		[Embed(source = "images/Menu.png")] private var BackgroundImageClass:Class;
 		
 		private var background:FlxSprite;
 		private var chosengrid:Number;
@@ -21,7 +21,7 @@ package
 			background = new FlxSprite(0, 0, BackgroundImageClass);
 			add(background);
 			
-			var GridText:FlxText = new FlxText(0, FlxG.height / 2 + 64, FlxG.width = 640, "Select your grid:\n\nA: 16x12 points (press A)\n\nB: 32x24 points (press B)");
+			var GridText:FlxText = new FlxText(0, FlxG.height / 2 - 10, FlxG.width = 640, "Select your grid:\n\nA: 16x12 points (press A)\n\nB: 32x24 points (press B)");
 			GridText.setFormat(null, 16, 0xffffff, "center");
 			add(GridText);
 		}

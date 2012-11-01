@@ -10,7 +10,7 @@ package
 	{
 		[Embed(source = "images/Background.png")] private var BackgroundImageClass:Class;
 		[Embed(source = "images/Player.png")] private var PlayerImageClass:Class;
-		[Embed(source = "images/RedVertical.png")] private var RedLaserImageClass:Class;
+		[Embed(source = "images/RedVerticalLarge.png")] private var RedLaserImageClass:Class;
 		[Embed(source = "images/Red.png")] private var RedImageClass:Class;
 		[Embed(source = "images/Exit.png")] private var ExitImageClass:Class;
 		
@@ -74,6 +74,10 @@ package
 				player.play("red");
 			}
 			
+			if (FlxG.keys.justReleased("ESCAPE")) {
+				fadeToMenu();
+			}
+			
 			FlxG.overlap(player, exit, win);
 		}
 		
@@ -81,6 +85,16 @@ package
 		{
 			player.explode();
 			FlxG.fade(0xFF000000, 1, restart);
+		}
+		
+		public function fadeToMenu():void
+		{
+			FlxG.fade(0xFF4b4b4b, 1, returnToMenu);
+		}
+		
+		public function returnToMenu():void
+		{
+			FlxG.switchState(new MenuState());
 		}
 		
 		public function restart():void

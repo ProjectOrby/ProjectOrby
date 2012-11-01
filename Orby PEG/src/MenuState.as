@@ -4,18 +4,18 @@ package
 	
 	public class MenuState extends FlxState
 	{
-		[Embed(source = "images/MenuBackground.png")] private var BackgroundImageClass:Class;
+		[Embed(source = "images/Menu.png")] private var BackgroundImageClass:Class;
 		
 		private var background:FlxSprite;
 		
 		public function MenuState()
 		{
-			FlxG.flash(0xff4b4b4b, 1);
-			
 			background = new FlxSprite(0, 0, BackgroundImageClass);
 			add(background);
 			
-			var newGameText:FlxText = new FlxText(0, FlxG.height / 2 + 64, FlxG.width = 640, "Press SPACE to start!\n\nPress 'E' to create a level!");
+			FlxG.flash(0xff4b4b4b, 1);
+			
+			var newGameText:FlxText = new FlxText(0, FlxG.height / 2 - 10, FlxG.width = 640, "Press 'SPACE' to start!\n\nPress 'E' to create a level!");
 			newGameText.setFormat(null, 16, 0xffffff, "center");
 			
 			add(newGameText);
